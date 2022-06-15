@@ -26,6 +26,8 @@ public:
 	int Book(string id);
 	void cancel(string id);
 	int WalkIn(string id);
+	int getTime();
+	int getDate();
 	void setTime();
 	void setDate();
 	int getFour_q_size();

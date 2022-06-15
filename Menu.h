@@ -20,7 +20,8 @@ class Menu {
 public:
 	Menu();
 	~Menu();
-	void print(string a,int n);
+	void printFlight(string a,int n);
+	void printRestaurant(string a, int n);
 	void getMenu();
 };
 #endif

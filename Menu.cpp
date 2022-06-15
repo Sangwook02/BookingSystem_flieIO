@@ -24,7 +24,7 @@ Menu::~Menu() {
 	delete[] ruser;
 	delete[] suser;
 }
-void Menu::print(string a, int n) {
+void Menu::printFlight(string a, int n) {
 	if (n == 0) {
 		if (a.substr(0, 2) == "GP") {
 			cout << "김포에서 출발하여 ";
@@ -59,6 +59,24 @@ void Menu::print(string a, int n) {
 		}
 		cout << a.substr(6, 2) << "일 " << a.substr(8, 2) << "시 비행기입니다.\n\n";
 	}
+}
+void Menu::printRestaurant(string a, int n) {
+	if (n == 0) {
+		cout << a[0] - 31 << "일 ";
+		if (a[1] == 49) {
+			cout << "12시에 " << a[3] << "번 자리 예약되어 있습니다." << endl;
+		}
+		else if (a[1] == 50) {
+			cout << "13시에 " << a[3] << "번 자리 예약되어 있습니다." << endl;
+		}
+		else if (a[1] == 51) {
+			cout << "18시에 " << a[3] << "번 자리 예약되어 있습니다." << endl;
+		}
+		else if (a[1] == 52) {
+			cout << "19시에 " << a[3] << "번 자리 예약되어 있습니다." << endl;
+		}
+	}
+	
 }
 void Menu::getMenu() {
 	string selectMenu;
@@ -138,7 +156,7 @@ void Menu::getMenu() {
 												break;
 											}
 										}
-										print(codeFlight, chk_1);
+										printFlight(codeFlight, chk_1);
 										
 									}
 								}
@@ -241,13 +259,39 @@ void Menu::getMenu() {
 									cout << "\n옳지 않은 입력입니다.\n다시 입력해주세요.\n\n";
 								}
 							}
-							else if (input.length() == 1 && input[0] == 50) {
-								for (int q = 0; q < dataRestaurantID.size(); q++) {
+							else if (input.length() == 1 && input[0] == 50) {//조회
+								int c, chk_1 = 0;
+								char tmp_1[100], tmp_2[100];
+								ifstream fini("C:\\Users\\chosw\\Desktop\\file_io.txt");
+								if (!fini) {
+									cout << "파일 열기 오류" << endl;
+								}
+								vector<string> lst;
+								while ((c = fini.get()) != EOF) {
+									fini.getline(tmp_1, 100);
+									string tmp(tmp_1);
+									int idx = tmp.find("\t", 4);
+									
+									if (tmp.substr(0, 4) == "d\t2\t" && tmp.substr(4, idx - 4) == Current) {
+										chk_1 = 1;
+										break;
+									}
 
-									if (dataRestaurantID[q] == Current) {
-										cout << ((int)dataRestaurantTime[q] / 4)+17 << "일 " << ((int)dataRestaurantTime[q] % 4) << "시에 "<< dataRestaurantTable[q]<<"번 테이블 예약되어 있습니다.\n";
+								}
+								fini.close();
+								ifstream fin("C:\\Users\\chosw\\Desktop\\file_io.txt");
+								while ((c = fin.get()) != EOF) {
+									fin.getline(tmp_1, 100);
+									string tmp(tmp_1);
+									int idx = tmp.find("\t", 4);
+
+									if (tmp.substr(0, 4) == "b\t2\t" && tmp.substr(4, idx - 4) == Current) {
+										string codeBook = tmp.substr(idx + 1, 4);
+										printRestaurant(codeBook, chk_1);
+
 									}
 								}
+								fin.close();
 								cout << "\n";
 							}
 							else if (input.length() == 1 && input[0] == 51) {
@@ -305,17 +349,18 @@ void Menu::getMenu() {
 						//예약
 						int now;
 						int current;
+						string c;
 						while (tmp == 0) {
 							cout << "\n예약:1 예약 조회:2 예약 취소:3 내 정보 조회:4 >> ";
 							now = suser->getCurrentUserSex();
-							current = suser->getCurrentUser();
+							c = suser->getCurrentUser();
 							string input;
 							cin >> input;
 
 							if (input.length() == 1 && input[0] == 49) {
-								tmp = r->Book(now,current);
+								tmp = r->Book(now,c);
 								for (int u = 0; u < studyCafeSize; u++) {
-									if (suser[u].getID() == current) {
+									if (suser[u].getID() == stoi(c)) {
 										suser[u].addNumberOfBook();
 										break;
 									}
@@ -327,19 +372,19 @@ void Menu::getMenu() {
 							else if (input.length() == 1 && input[0] == 50) {
 								for (int q = 0; q < dataStudyCafeID.size(); q++) {
 
-									if (dataStudyCafeID[q] == current) {
+									if (dataStudyCafeID[q] == stoi(c)) {
 										cout << ((int)dataStudyCafeTime[q] / 14) + 17 << "일 " << ((int)dataStudyCafeTime[q] % 14)+9 << "시에 " << dataStudyCafeSeat[q] << "번 자리 예약되어 있습니다.\n";
 									}
 								}
 								cout << "\n";
 							}
 							else if (input.length() == 1 && input[0] == 51) {
-								r->cancel(current);
+								r->cancel(stoi(c));
 							}
 
 							else if (input.length() == 1 && input[0] == 52) {
 								for (int u = 0; u < studyCafeSize; u++) {
-									if (suser[u].getID() == current) {
+									if (suser[u].getID() == stoi(c)) {
 										cout << "회원님의 예약 횟수는 " << suser[u].getNumberOfBook() << "회 입니다.\n\n";
 										tmp = 1;
 										break;

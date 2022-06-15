@@ -23,8 +23,10 @@ void BookStudyCafe::cancel(int id) {
 		}
 	}
 }
-
-int BookStudyCafe::Book(int sex, int id) {
+int BookStudyCafe::getDate() {
+	return date;
+}
+int BookStudyCafe::Book(int sex, string id) {
 	int number = 0,tmp;
 	string num;
 	while (1) {
@@ -50,7 +52,7 @@ int BookStudyCafe::Book(int sex, int id) {
 	}
 	setDate();
 	setTime();
-
+	ofstream fout("c:\\Users\\chosw\\Desktop\\file_io.txt", ios::app);
 	//자리 선택
 	for (int i = 0; i < 14; i++) {
 		if (time[i] == 1) {
@@ -85,11 +87,18 @@ int BookStudyCafe::Book(int sex, int id) {
 				}
 				cout << "\n\t-------------------------------------------------------------\n";
 			}
+			if (!fout) {
+				cout << "failed to open file";
+			}
+			cout << id;
+			fout << "bb\t3\t" << id << "\t" << getDate() << "\t" << i + 9 << "\t";
+
+
 			int b = 0;
 			while (b == 0) {
 				cout << ">> ";
 				cin >> num;
-
+				fout << num<< endl;
 				int number = 0, tmp;
 				int size = (int)num.size();
 				for (int j = 0; j < num.size(); j++) {
@@ -99,14 +108,16 @@ int BookStudyCafe::Book(int sex, int id) {
 				}
 				if (number < 225 && number >= 0) {
 					b = take(14 * date + i, (number / 15), (number % 15), sex);
-					dataStudyCafeID.push_back(id);
+					//dataStudyCafeID.push_back(id);
 				}
 				else {
 					cout << "잘못된 입력입니다. 다시 입력해주세요.\n";
 				}
 			}
+			
 		}
 	}
+	fout.close();
 	return 1;
 }
 

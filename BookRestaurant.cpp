@@ -35,14 +35,26 @@ BookRestaurant::BookRestaurant() {
 	}
 }
 void BookRestaurant::cancel(string id) {
-	for (int i = 0; i < dataRestaurantID.size(); i++) {
-		if (dataRestaurantID[i] == id) {
-			dataRestaurantID[i] = "";
-			dataRestaurantTime[i] = -1;
-			dataRestaurantTable[i] = -1;
+	int c;
+	char tmp_1[100];
+	ofstream fout("C:\\Users\\chosw\\Desktop\\file_io.txt", ios::app);
+	ifstream fin("C:\\Users\\chosw\\Desktop\\file_io.txt", ios::app);
+	if (!fout || !fin) {
+		cout << "파일 열기 오류" << endl;
+	}
+	while ((c = fin.get()) != EOF) {
+		fin.getline(tmp_1, 100);
+		string tmp(tmp_1);
+		int idx = tmp.find("\t", 4);
 
+		if(tmp.substr(0, 4) == "b\t2\t" && tmp.substr(4, idx - 4) == id) {
+			fout << "dd\t2\t" << id << endl;
+			
 		}
 	}
+	fout.close();
+
+	fin.close();
 	cout << "예약이 모두 취소되었습니다.\n\n";
 }
 int BookRestaurant::Book(string id) {
@@ -75,6 +87,12 @@ int BookRestaurant::Book(string id) {
 	while (b == 0) {
 		cout << ">> ";
 		cin >> input;
+		ofstream fout("c:\\Users\\chosw\\Desktop\\file_io.txt", ios::app);
+		if (!fout) {
+			cout << "failed to open file";
+		}
+		fout << "bb\t2\t" << id << "\t" << getDate() << getTime() << "\t" << input << endl;
+		fout.close();
 		cout << "\n";
 		if (input.length() == 1) {
 			if (input[0] == 48) {
@@ -268,7 +286,12 @@ void BookRestaurant::setTime() {
 		cout << "\n옳지 않은 입력입니다.\n다시 입력해주세요.\n\n";
 	}
 }
-
+int BookRestaurant::getTime() {
+	return time;
+}
+int BookRestaurant::getDate() {
+	return date;
+}
 void BookRestaurant::setDate() {
 	string input;
 	int tmp;

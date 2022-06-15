@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <fstream>
 #include "Seat.h"
 
 using namespace std;
@@ -19,10 +20,11 @@ class BookStudyCafe {
 	Seat s[98][17][17];
 public:
 	BookStudyCafe();
+	int getDate();
 	void setDate();
 	void setTime();
 	void cancel(int id);
-	int Book(int s, int id);
+	int Book(int s, string id);
 	int take(int part, int a, int b, int sex);
 };
 

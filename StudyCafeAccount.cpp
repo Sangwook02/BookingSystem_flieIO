@@ -93,8 +93,11 @@ void StudyCafeAccount::addTime(int date, int hour) {
 	time[date] += hour;
 }
 
-int StudyCafeAccount::getCurrentUser() {
+string StudyCafeAccount::getCurrentUser() {
 	return currentUserID;
+}
+void StudyCafeAccount::setCurrentUser(string n) {
+	this->currentUserID = n;
 }
 void StudyCafeAccount::setCurrentUserSex(int sex) {
 	this->currentUserSex = sex;
@@ -150,7 +153,7 @@ int StudyCafeAccount::login() {
 
 	if (find(num, 3)) {
 		cout << "\n---로그인 성공---\n\n";
-		this->currentUserID = id;
+		setCurrentUser(num);
 		//성별 입력
 		while (1) {
 			cout << "이용자의 성별을 입력해주세요.(남자:1 여자:2) >> ";
