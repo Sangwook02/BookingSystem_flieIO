@@ -23,7 +23,7 @@ public:
 	int getDate();
 	void setDate();
 	void setTime();
-	void cancel(int id);
+	void cancel(string id);
 	int Book(int s, string id);
 	int take(int part, int a, int b, int sex);
 };

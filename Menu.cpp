@@ -78,6 +78,19 @@ void Menu::printRestaurant(string a, int n) {
 	}
 	
 }
+
+void Menu::printStudy(string a, int n) {
+	if (n == 0) {
+		cout << a[0] - 31 << "일 ";
+
+		int tmp = 0;
+		tmp += (a[2]-48);
+		tmp *= 10;
+		tmp += (a[3]-48);
+		cout << tmp << "시에 예약되어 있습니다." << endl;
+	}
+
+}
 void Menu::getMenu() {
 	string selectMenu;
 	BookFlight*p = new BookFlight();
@@ -369,17 +382,42 @@ void Menu::getMenu() {
 							}
 
 
-							else if (input.length() == 1 && input[0] == 50) {
-								for (int q = 0; q < dataStudyCafeID.size(); q++) {
+							else if (input.length() == 1 && input[0] == 50) {//조회
+								int k, chk_1 = 0;
+								char tmp_1[100], tmp_2[100];
+								ifstream fini("C:\\Users\\chosw\\Desktop\\file_io.txt");
+								if (!fini) {
+									cout << "파일 열기 오류" << endl;
+								}
+								vector<string> lst;
+								while ((k = fini.get()) != EOF) {
+									fini.getline(tmp_1, 100);
+									string tmp(tmp_1);
+									int idx = tmp.find("\t", 4);
 
-									if (dataStudyCafeID[q] == stoi(c)) {
-										cout << ((int)dataStudyCafeTime[q] / 14) + 17 << "일 " << ((int)dataStudyCafeTime[q] % 14)+9 << "시에 " << dataStudyCafeSeat[q] << "번 자리 예약되어 있습니다.\n";
+									if (tmp.substr(0, 4) == "d\t3\t" && tmp.substr(4, c.size()) == c) {
+										chk_1 = 1;
+										break;
+									}
+
+								}
+								fini.close();
+								ifstream fin("C:\\Users\\chosw\\Desktop\\file_io.txt");
+								while ((k = fin.get()) != EOF) {
+									fin.getline(tmp_1, 100);
+									string tmp(tmp_1);
+									if (tmp.substr(0, 4) == "b\t3\t" && tmp.substr(4, c.size()) == c) {
+										string codeBook = tmp.substr(5+c.size(), 4);
+										printStudy(codeBook, chk_1);
+
 									}
 								}
+								fin.close();
+								
 								cout << "\n";
 							}
-							else if (input.length() == 1 && input[0] == 51) {
-								r->cancel(stoi(c));
+							else if (input.length() == 1 && input[0] == 51) {//취소
+								r->cancel(c);
 							}
 
 							else if (input.length() == 1 && input[0] == 52) {
@@ -430,3 +468,6 @@ void Menu::getMenu() {
 	}
 	
 }
+
+
+

@@ -21,6 +21,7 @@ public:
 	Menu();
 	~Menu();
 	void printFlight(string a,int n);
+	void printStudy(string a, int n);
 	void printRestaurant(string a, int n);
 	void getMenu();
 };

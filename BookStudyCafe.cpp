@@ -14,14 +14,26 @@ int BookStudyCafe::take(int part, int a, int b, int sex) {
 	}
 }
 
-void BookStudyCafe::cancel(int id) {
-	for (int i = 0; i < dataStudyCafeID.size(); i++) {
-		if (dataStudyCafeID[i] == id) {
-			dataStudyCafeID[i] = -1;
-			dataStudyCafeTime[i] = -1;
-			dataStudyCafeSeat[i] = -1;
+void BookStudyCafe::cancel(string id) {
+	int c;
+	char tmp_1[100];
+	ofstream fout("C:\\Users\\chosw\\Desktop\\file_io.txt", ios::app);
+	ifstream fin("C:\\Users\\chosw\\Desktop\\file_io.txt", ios::app);
+	if (!fout || !fin) {
+		cout << "파일 열기 오류" << endl;
+	}
+	while ((c = fin.get()) != EOF) {
+		fin.getline(tmp_1, 100);
+		string tmp(tmp_1);
+		if (tmp.substr(0, 4) == "b\t3\t" && tmp.substr(4, id.size()) == id) {
+			fout << "dd\t3\t" << id << endl;
+
 		}
 	}
+	fout.close();
+
+	fin.close();
+	cout << "예약이 모두 취소되었습니다.\n\n";
 }
 int BookStudyCafe::getDate() {
 	return date;
